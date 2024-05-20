@@ -19,12 +19,16 @@ type Client struct {
     internal *sdkgen.ClientAbstract
 }
 
-func (client *Client) Users() *UsersTag {
-    return NewUsersTag(client.internal.HttpClient, client.internal.Parser)
+func (client *Client) User() *UserTag {
+    return NewUserTag(client.internal.HttpClient, client.internal.Parser)
 }
 
-func (client *Client) Databases() *DatabasesTag {
-    return NewDatabasesTag(client.internal.HttpClient, client.internal.Parser)
+func (client *Client) Database() *DatabaseTag {
+    return NewDatabaseTag(client.internal.HttpClient, client.internal.Parser)
+}
+
+func (client *Client) Page() *PageTag {
+    return NewPageTag(client.internal.HttpClient, client.internal.Parser)
 }
 
 
