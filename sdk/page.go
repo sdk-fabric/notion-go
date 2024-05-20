@@ -13,7 +13,9 @@ type Page struct {
     LastEditedBy *User `json:"last_edited_by"`
     Cover string `json:"cover"`
     Icon string `json:"icon"`
-    Parent string `json:"parent"`
+    Parent any `json:"parent"`
     InTrash bool `json:"in_trash"`
     Properties map[string]any `json:"properties"`
+    Url string `json:"url"`
+    PublicUrl string `json:"public_url"`
 }

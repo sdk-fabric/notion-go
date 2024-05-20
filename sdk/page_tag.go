@@ -5,7 +5,7 @@
 
 
 import (
-    
+    "bytes"
     "encoding/json"
     "errors"
     "github.com/apioo/sdkgen-go"
@@ -43,6 +43,63 @@ func (client *PageTag) Get(pageId string) (Page, error) {
         return Page{}, err
     }
 
+
+    resp, err := client.internal.HttpClient.Do(req)
+    if err != nil {
+        return Page{}, err
+    }
+
+    defer resp.Body.Close()
+
+    respBody, err := io.ReadAll(resp.Body)
+    if err != nil {
+        return Page{}, err
+    }
+
+    if resp.StatusCode >= 200 && resp.StatusCode < 300 {
+        var response Page
+        err = json.Unmarshal(respBody, &response)
+        if err != nil {
+            return Page{}, err
+        }
+
+        return response, nil
+    }
+
+    switch resp.StatusCode {
+        default:
+            return Page{}, errors.New("the server returned an unknown status code")
+    }
+}
+
+// Create 
+func (client *PageTag) Create(payload Page) (Page, error) {
+    pathParams := make(map[string]interface{})
+
+    queryParams := make(map[string]interface{})
+
+    var queryStructNames []string
+
+    u, err := url.Parse(client.internal.Parser.Url("/v1/pages", pathParams))
+    if err != nil {
+        return Page{}, err
+    }
+
+    u.RawQuery = client.internal.Parser.QueryWithStruct(queryParams, queryStructNames).Encode()
+
+    raw, err := json.Marshal(payload)
+    if err != nil {
+        return Page{}, err
+    }
+
+    var reqBody = bytes.NewReader(raw)
+
+    req, err := http.NewRequest("POST", u.String(), reqBody)
+    if err != nil {
+        return Page{}, err
+    }
+
+    req.Header.Set("Content-Type", "application/json")
 
     resp, err := client.internal.HttpClient.Do(req)
     if err != nil {
