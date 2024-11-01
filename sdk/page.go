@@ -3,12 +3,11 @@
 // @see https://sdkgen.app
 
 
-import "time"
 type Page struct {
     Object string `json:"object"`
     Id string `json:"id"`
-    CreatedTime time.Time `json:"created_time"`
-    LastEditedTime time.Time `json:"last_edited_time"`
+    CreatedTime string `json:"created_time"`
+    LastEditedTime string `json:"last_edited_time"`
     CreatedBy *User `json:"created_by"`
     LastEditedBy *User `json:"last_edited_by"`
     Cover string `json:"cover"`

@@ -8,7 +8,8 @@ import (
     
     "encoding/json"
     "errors"
-    "github.com/apioo/sdkgen-go"
+    "fmt"
+    
     "io"
     "net/http"
     "net/url"
@@ -21,7 +22,7 @@ type DatabaseTag struct {
 
 
 
-// Get 
+// Get Retrieves a database object — information that describes the structure and columns of a database — for a provided database ID. The response adheres to any limits to an integration’s capabilities.
 func (client *DatabaseTag) Get(databaseId string) (Database, error) {
     pathParams := make(map[string]interface{})
     pathParams["database_id"] = databaseId
@@ -57,20 +58,16 @@ func (client *DatabaseTag) Get(databaseId string) (Database, error) {
     }
 
     if resp.StatusCode >= 200 && resp.StatusCode < 300 {
-        var response Database
-        err = json.Unmarshal(respBody, &response)
-        if err != nil {
-            return Database{}, err
-        }
+        var data Database
+        err := json.Unmarshal(respBody, &data)
 
-        return response, nil
+        return data, err
     }
 
-    switch resp.StatusCode {
-        default:
-            return Database{}, errors.New("the server returned an unknown status code")
-    }
+    var statusCode = resp.StatusCode
+    return Database{}, errors.New(fmt.Sprint("The server returned an unknown status code: ", statusCode))
 }
+
 
 
 
