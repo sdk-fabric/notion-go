@@ -8,7 +8,8 @@ import (
     "bytes"
     "encoding/json"
     "errors"
-    "github.com/apioo/sdkgen-go"
+    "fmt"
+    
     "io"
     "net/http"
     "net/url"
@@ -21,7 +22,7 @@ type PageTag struct {
 
 
 
-// Get 
+// Get Retrieves a Page object using the ID specified.
 func (client *PageTag) Get(pageId string) (Page, error) {
     pathParams := make(map[string]interface{})
     pathParams["page_id"] = pageId
@@ -57,22 +58,17 @@ func (client *PageTag) Get(pageId string) (Page, error) {
     }
 
     if resp.StatusCode >= 200 && resp.StatusCode < 300 {
-        var response Page
-        err = json.Unmarshal(respBody, &response)
-        if err != nil {
-            return Page{}, err
-        }
+        var data Page
+        err := json.Unmarshal(respBody, &data)
 
-        return response, nil
+        return data, err
     }
 
-    switch resp.StatusCode {
-        default:
-            return Page{}, errors.New("the server returned an unknown status code")
-    }
+    var statusCode = resp.StatusCode
+    return Page{}, errors.New(fmt.Sprint("The server returned an unknown status code: ", statusCode))
 }
 
-// Create 
+// Create Creates a new page that is a child of an existing page or database.
 func (client *PageTag) Create(payload Page) (Page, error) {
     pathParams := make(map[string]interface{})
 
@@ -114,20 +110,16 @@ func (client *PageTag) Create(payload Page) (Page, error) {
     }
 
     if resp.StatusCode >= 200 && resp.StatusCode < 300 {
-        var response Page
-        err = json.Unmarshal(respBody, &response)
-        if err != nil {
-            return Page{}, err
-        }
+        var data Page
+        err := json.Unmarshal(respBody, &data)
 
-        return response, nil
+        return data, err
     }
 
-    switch resp.StatusCode {
-        default:
-            return Page{}, errors.New("the server returned an unknown status code")
-    }
+    var statusCode = resp.StatusCode
+    return Page{}, errors.New(fmt.Sprint("The server returned an unknown status code: ", statusCode))
 }
+
 
 
 
