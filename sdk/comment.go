@@ -4,7 +4,7 @@
 
 
 type Comment struct {
-    Parent *PageId `json:"parent"`
+    Parent *ParentId `json:"parent"`
     DiscussionId string `json:"discussion_id"`
     RichText *RichText `json:"rich_text"`
 }
