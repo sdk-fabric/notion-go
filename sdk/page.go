@@ -10,11 +10,11 @@ type Page struct {
     LastEditedTime string `json:"last_edited_time"`
     CreatedBy *User `json:"created_by"`
     LastEditedBy *User `json:"last_edited_by"`
-    Cover string `json:"cover"`
-    Icon string `json:"icon"`
-    Parent any `json:"parent"`
+    Cover *FileObject `json:"cover"`
+    Icon *Icon `json:"icon"`
     InTrash bool `json:"in_trash"`
     Properties map[string]any `json:"properties"`
+    Parent *ParentId `json:"parent"`
     Url string `json:"url"`
     PublicUrl string `json:"public_url"`
 }
