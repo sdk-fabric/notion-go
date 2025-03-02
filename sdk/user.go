@@ -11,3 +11,4 @@ type User struct {
     Name string `json:"name"`
     AvatarUrl string `json:"avatar_url"`
 }
+

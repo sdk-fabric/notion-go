@@ -9,7 +9,7 @@ import (
     "encoding/json"
     "errors"
     "fmt"
-    
+    "github.com/apioo/sdkgen-go/v2"
     "io"
     "net/http"
     "net/url"
@@ -23,7 +23,7 @@ type DatabaseTag struct {
 
 
 // Get Retrieves a database object — information that describes the structure and columns of a database — for a provided database ID. The response adheres to any limits to an integration’s capabilities.
-func (client *DatabaseTag) Get(databaseId string) (Database, error) {
+func (client *DatabaseTag) Get(databaseId string) (*Database, error) {
     pathParams := make(map[string]interface{})
     pathParams["database_id"] = databaseId
 
@@ -33,7 +33,7 @@ func (client *DatabaseTag) Get(databaseId string) (Database, error) {
 
     u, err := url.Parse(client.internal.Parser.Url("/v1/databases/:database_id", pathParams))
     if err != nil {
-        return Database{}, err
+        return nil, err
     }
 
     u.RawQuery = client.internal.Parser.QueryWithStruct(queryParams, queryStructNames).Encode()
@@ -41,31 +41,41 @@ func (client *DatabaseTag) Get(databaseId string) (Database, error) {
 
     req, err := http.NewRequest("GET", u.String(), nil)
     if err != nil {
-        return Database{}, err
+        return nil, err
     }
 
 
     resp, err := client.internal.HttpClient.Do(req)
     if err != nil {
-        return Database{}, err
+        return nil, err
     }
 
     defer resp.Body.Close()
 
     respBody, err := io.ReadAll(resp.Body)
     if err != nil {
-        return Database{}, err
+        return nil, err
     }
 
     if resp.StatusCode >= 200 && resp.StatusCode < 300 {
         var data Database
         err := json.Unmarshal(respBody, &data)
 
-        return data, err
+        return &data, err
     }
 
     var statusCode = resp.StatusCode
-    return Database{}, errors.New(fmt.Sprint("The server returned an unknown status code: ", statusCode))
+    if statusCode >= 0 && statusCode <= 999 {
+        var data Error
+        err := json.Unmarshal(respBody, &data)
+
+        return nil, &ErrorException{
+            Payload: data,
+            Previous: err,
+        }
+    }
+
+    return nil, errors.New(fmt.Sprint("The server returned an unknown status code: ", statusCode))
 }
 
 

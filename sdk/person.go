@@ -6,3 +6,4 @@
 type Person struct {
     Email string `json:"email"`
 }
+

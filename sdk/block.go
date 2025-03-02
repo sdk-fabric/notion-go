@@ -15,3 +15,4 @@ type Block struct {
     InTrash bool `json:"in_trash"`
     Type string `json:"type"`
 }
+

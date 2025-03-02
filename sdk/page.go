@@ -18,3 +18,4 @@ type Page struct {
     Url string `json:"url"`
     PublicUrl string `json:"public_url"`
 }
+

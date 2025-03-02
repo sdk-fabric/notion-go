@@ -11,3 +11,4 @@ type RichTextAnnotation struct {
     Code bool `json:"code"`
     Color string `json:"color"`
 }
+

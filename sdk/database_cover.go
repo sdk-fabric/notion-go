@@ -7,3 +7,4 @@ type DatabaseCover struct {
     Type string `json:"type"`
     External any `json:"external"`
 }
+

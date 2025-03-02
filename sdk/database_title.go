@@ -10,3 +10,4 @@ type DatabaseTitle struct {
     PlainText string `json:"plain_text"`
     Href string `json:"href"`
 }
+

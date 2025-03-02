@@ -9,7 +9,7 @@ import (
     "encoding/json"
     "errors"
     "fmt"
-    
+    "github.com/apioo/sdkgen-go/v2"
     "io"
     "net/http"
     "net/url"
@@ -23,7 +23,7 @@ type UserTag struct {
 
 
 // GetAll Returns a paginated list of Users for the workspace. The response may contain fewer than page_size of results.
-func (client *UserTag) GetAll(startCursor string, pageSize int) (UserCollection, error) {
+func (client *UserTag) GetAll(startCursor string, pageSize int) (*UserCollection, error) {
     pathParams := make(map[string]interface{})
 
     queryParams := make(map[string]interface{})
@@ -34,7 +34,7 @@ func (client *UserTag) GetAll(startCursor string, pageSize int) (UserCollection,
 
     u, err := url.Parse(client.internal.Parser.Url("/v1/users", pathParams))
     if err != nil {
-        return UserCollection{}, err
+        return nil, err
     }
 
     u.RawQuery = client.internal.Parser.QueryWithStruct(queryParams, queryStructNames).Encode()
@@ -42,35 +42,45 @@ func (client *UserTag) GetAll(startCursor string, pageSize int) (UserCollection,
 
     req, err := http.NewRequest("GET", u.String(), nil)
     if err != nil {
-        return UserCollection{}, err
+        return nil, err
     }
 
 
     resp, err := client.internal.HttpClient.Do(req)
     if err != nil {
-        return UserCollection{}, err
+        return nil, err
     }
 
     defer resp.Body.Close()
 
     respBody, err := io.ReadAll(resp.Body)
     if err != nil {
-        return UserCollection{}, err
+        return nil, err
     }
 
     if resp.StatusCode >= 200 && resp.StatusCode < 300 {
         var data UserCollection
         err := json.Unmarshal(respBody, &data)
 
-        return data, err
+        return &data, err
     }
 
     var statusCode = resp.StatusCode
-    return UserCollection{}, errors.New(fmt.Sprint("The server returned an unknown status code: ", statusCode))
+    if statusCode >= 0 && statusCode <= 999 {
+        var data Error
+        err := json.Unmarshal(respBody, &data)
+
+        return nil, &ErrorException{
+            Payload: data,
+            Previous: err,
+        }
+    }
+
+    return nil, errors.New(fmt.Sprint("The server returned an unknown status code: ", statusCode))
 }
 
 // Get Retrieves a User using the ID specified.
-func (client *UserTag) Get(userId string) (User, error) {
+func (client *UserTag) Get(userId string) (*User, error) {
     pathParams := make(map[string]interface{})
     pathParams["user_id"] = userId
 
@@ -80,7 +90,7 @@ func (client *UserTag) Get(userId string) (User, error) {
 
     u, err := url.Parse(client.internal.Parser.Url("/v1/users/:user_id", pathParams))
     if err != nil {
-        return User{}, err
+        return nil, err
     }
 
     u.RawQuery = client.internal.Parser.QueryWithStruct(queryParams, queryStructNames).Encode()
@@ -88,31 +98,41 @@ func (client *UserTag) Get(userId string) (User, error) {
 
     req, err := http.NewRequest("GET", u.String(), nil)
     if err != nil {
-        return User{}, err
+        return nil, err
     }
 
 
     resp, err := client.internal.HttpClient.Do(req)
     if err != nil {
-        return User{}, err
+        return nil, err
     }
 
     defer resp.Body.Close()
 
     respBody, err := io.ReadAll(resp.Body)
     if err != nil {
-        return User{}, err
+        return nil, err
     }
 
     if resp.StatusCode >= 200 && resp.StatusCode < 300 {
         var data User
         err := json.Unmarshal(respBody, &data)
 
-        return data, err
+        return &data, err
     }
 
     var statusCode = resp.StatusCode
-    return User{}, errors.New(fmt.Sprint("The server returned an unknown status code: ", statusCode))
+    if statusCode >= 0 && statusCode <= 999 {
+        var data Error
+        err := json.Unmarshal(respBody, &data)
+
+        return nil, &ErrorException{
+            Payload: data,
+            Previous: err,
+        }
+    }
+
+    return nil, errors.New(fmt.Sprint("The server returned an unknown status code: ", statusCode))
 }
 
 

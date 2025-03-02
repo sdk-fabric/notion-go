@@ -11,3 +11,4 @@ type DatabaseAnnotations struct {
     Code bool `json:"code"`
     Color string `json:"color"`
 }
+

@@ -8,3 +8,4 @@ type UserCollection struct {
     NextCursor string `json:"next_cursor"`
     HasMore bool `json:"has_more"`
 }
+

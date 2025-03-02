@@ -9,7 +9,7 @@ import (
     "encoding/json"
     "errors"
     "fmt"
-    
+    "github.com/apioo/sdkgen-go/v2"
     "io"
     "net/http"
     "net/url"
@@ -23,7 +23,7 @@ type PageTag struct {
 
 
 // Get Retrieves a Page object using the ID specified.
-func (client *PageTag) Get(pageId string) (Page, error) {
+func (client *PageTag) Get(pageId string) (*Page, error) {
     pathParams := make(map[string]interface{})
     pathParams["page_id"] = pageId
 
@@ -33,7 +33,7 @@ func (client *PageTag) Get(pageId string) (Page, error) {
 
     u, err := url.Parse(client.internal.Parser.Url("/v1/pages/:page_id", pathParams))
     if err != nil {
-        return Page{}, err
+        return nil, err
     }
 
     u.RawQuery = client.internal.Parser.QueryWithStruct(queryParams, queryStructNames).Encode()
@@ -41,35 +41,45 @@ func (client *PageTag) Get(pageId string) (Page, error) {
 
     req, err := http.NewRequest("GET", u.String(), nil)
     if err != nil {
-        return Page{}, err
+        return nil, err
     }
 
 
     resp, err := client.internal.HttpClient.Do(req)
     if err != nil {
-        return Page{}, err
+        return nil, err
     }
 
     defer resp.Body.Close()
 
     respBody, err := io.ReadAll(resp.Body)
     if err != nil {
-        return Page{}, err
+        return nil, err
     }
 
     if resp.StatusCode >= 200 && resp.StatusCode < 300 {
         var data Page
         err := json.Unmarshal(respBody, &data)
 
-        return data, err
+        return &data, err
     }
 
     var statusCode = resp.StatusCode
-    return Page{}, errors.New(fmt.Sprint("The server returned an unknown status code: ", statusCode))
+    if statusCode >= 0 && statusCode <= 999 {
+        var data Error
+        err := json.Unmarshal(respBody, &data)
+
+        return nil, &ErrorException{
+            Payload: data,
+            Previous: err,
+        }
+    }
+
+    return nil, errors.New(fmt.Sprint("The server returned an unknown status code: ", statusCode))
 }
 
 // Create Creates a new page that is a child of an existing page or database.
-func (client *PageTag) Create(payload Page) (Page, error) {
+func (client *PageTag) Create(payload Page) (*Page, error) {
     pathParams := make(map[string]interface{})
 
     queryParams := make(map[string]interface{})
@@ -78,46 +88,56 @@ func (client *PageTag) Create(payload Page) (Page, error) {
 
     u, err := url.Parse(client.internal.Parser.Url("/v1/pages", pathParams))
     if err != nil {
-        return Page{}, err
+        return nil, err
     }
 
     u.RawQuery = client.internal.Parser.QueryWithStruct(queryParams, queryStructNames).Encode()
 
     raw, err := json.Marshal(payload)
     if err != nil {
-        return Page{}, err
+        return nil, err
     }
 
     var reqBody = bytes.NewReader(raw)
 
     req, err := http.NewRequest("POST", u.String(), reqBody)
     if err != nil {
-        return Page{}, err
+        return nil, err
     }
 
     req.Header.Set("Content-Type", "application/json")
 
     resp, err := client.internal.HttpClient.Do(req)
     if err != nil {
-        return Page{}, err
+        return nil, err
     }
 
     defer resp.Body.Close()
 
     respBody, err := io.ReadAll(resp.Body)
     if err != nil {
-        return Page{}, err
+        return nil, err
     }
 
     if resp.StatusCode >= 200 && resp.StatusCode < 300 {
         var data Page
         err := json.Unmarshal(respBody, &data)
 
-        return data, err
+        return &data, err
     }
 
     var statusCode = resp.StatusCode
-    return Page{}, errors.New(fmt.Sprint("The server returned an unknown status code: ", statusCode))
+    if statusCode >= 0 && statusCode <= 999 {
+        var data Error
+        err := json.Unmarshal(respBody, &data)
+
+        return nil, &ErrorException{
+            Payload: data,
+            Previous: err,
+        }
+    }
+
+    return nil, errors.New(fmt.Sprint("The server returned an unknown status code: ", statusCode))
 }
 
 

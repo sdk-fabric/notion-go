@@ -9,3 +9,4 @@ type RichText struct {
     PlainText string `json:"plain_text"`
     Href string `json:"href"`
 }
+

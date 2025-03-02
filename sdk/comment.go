@@ -8,3 +8,4 @@ type Comment struct {
     DiscussionId string `json:"discussion_id"`
     RichText *RichText `json:"rich_text"`
 }
+
