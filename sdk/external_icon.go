@@ -5,6 +5,6 @@
 
 type ExternalIcon struct {
     Type string `json:"type"`
-    External *External `json:"external"`
+    External *ExternalObject `json:"external"`
 }
 

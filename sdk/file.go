@@ -4,7 +4,8 @@
 
 
 type File struct {
-    Url string `json:"url"`
-    ExpiryTime string `json:"expiry_time"`
+    Caption []RichText `json:"caption"`
+    File *FileObject `json:"file"`
+    Name string `json:"name"`
 }
 

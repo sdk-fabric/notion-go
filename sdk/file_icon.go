@@ -5,6 +5,6 @@
 
 type FileIcon struct {
     Type string `json:"type"`
-    File *File `json:"file"`
+    File *FileObject `json:"file"`
 }
 
