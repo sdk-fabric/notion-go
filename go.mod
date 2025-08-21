@@ -1,4 +1,4 @@
-module github.com/sdk-fabric/notion
+module github.com/sdk-fabric/notion-go
 
 go 1.18
 
