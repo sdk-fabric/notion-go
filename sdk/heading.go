@@ -3,9 +3,11 @@
 // @see https://sdkgen.app
 
 
+
+// Content of a heading block.
 type Heading struct {
-    RichText []RichText `json:"rich_text"`
     Color string `json:"color"`
     IsToggleable bool `json:"is_toggleable"`
+    RichText []RichText `json:"rich_text"`
 }
 

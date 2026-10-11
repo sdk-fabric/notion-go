@@ -5,7 +5,7 @@
 
 
 import (
-    
+    "bytes"
     "encoding/json"
     "errors"
     "fmt"
@@ -22,7 +22,69 @@ type DatabaseTag struct {
 
 
 
-// Get Retrieves a database object — information that describes the structure and columns of a database — for a provided database ID. The response adheres to any limits to an integration’s capabilities.
+// Create Creates a database and its initial data source as a child of a page or the workspace.
+func (client *DatabaseTag) Create(payload CreateDatabaseRequest) (*Database, error) {
+    pathParams := make(map[string]interface{})
+
+    queryParams := make(map[string]interface{})
+
+    var queryStructNames []string
+
+    u, err := url.Parse(client.internal.Parser.Url("/databases", pathParams))
+    if err != nil {
+        return nil, err
+    }
+
+    u.RawQuery = client.internal.Parser.QueryWithStruct(queryParams, queryStructNames).Encode()
+
+    raw, err := json.Marshal(payload)
+    if err != nil {
+        return nil, err
+    }
+
+    var reqBody = bytes.NewReader(raw)
+
+    req, err := http.NewRequest("POST", u.String(), reqBody)
+    if err != nil {
+        return nil, err
+    }
+
+    req.Header.Set("Content-Type", "application/json")
+
+    resp, err := client.internal.HttpClient.Do(req)
+    if err != nil {
+        return nil, err
+    }
+
+    defer resp.Body.Close()
+
+    respBody, err := io.ReadAll(resp.Body)
+    if err != nil {
+        return nil, err
+    }
+
+    if resp.StatusCode >= 200 && resp.StatusCode < 300 {
+        var data Database
+        err := json.Unmarshal(respBody, &data)
+
+        return &data, err
+    }
+
+    var statusCode = resp.StatusCode
+    if statusCode >= 0 && statusCode <= 999 {
+        var data Error
+        err := json.Unmarshal(respBody, &data)
+
+        return nil, &ErrorException{
+            Payload: data,
+            Previous: err,
+        }
+    }
+
+    return nil, errors.New(fmt.Sprint("The server returned an unknown status code: ", statusCode))
+}
+
+// Get Retrieves a database object, a container for one or more data sources, for a provided database ID. Use Retrieve a data source to read its property schema.
 func (client *DatabaseTag) Get(databaseId string) (*Database, error) {
     pathParams := make(map[string]interface{})
     pathParams["database_id"] = databaseId
@@ -31,7 +93,7 @@ func (client *DatabaseTag) Get(databaseId string) (*Database, error) {
 
     var queryStructNames []string
 
-    u, err := url.Parse(client.internal.Parser.Url("/v1/databases/:database_id", pathParams))
+    u, err := url.Parse(client.internal.Parser.Url("/databases/:database_id", pathParams))
     if err != nil {
         return nil, err
     }
@@ -44,6 +106,69 @@ func (client *DatabaseTag) Get(databaseId string) (*Database, error) {
         return nil, err
     }
 
+
+    resp, err := client.internal.HttpClient.Do(req)
+    if err != nil {
+        return nil, err
+    }
+
+    defer resp.Body.Close()
+
+    respBody, err := io.ReadAll(resp.Body)
+    if err != nil {
+        return nil, err
+    }
+
+    if resp.StatusCode >= 200 && resp.StatusCode < 300 {
+        var data Database
+        err := json.Unmarshal(respBody, &data)
+
+        return &data, err
+    }
+
+    var statusCode = resp.StatusCode
+    if statusCode >= 0 && statusCode <= 999 {
+        var data Error
+        err := json.Unmarshal(respBody, &data)
+
+        return nil, &ErrorException{
+            Payload: data,
+            Previous: err,
+        }
+    }
+
+    return nil, errors.New(fmt.Sprint("The server returned an unknown status code: ", statusCode))
+}
+
+// Update Updates the attributes (title, description, icon, cover, parent, inline, trash and lock status) of a database.
+func (client *DatabaseTag) Update(databaseId string, payload UpdateDatabaseRequest) (*Database, error) {
+    pathParams := make(map[string]interface{})
+    pathParams["database_id"] = databaseId
+
+    queryParams := make(map[string]interface{})
+
+    var queryStructNames []string
+
+    u, err := url.Parse(client.internal.Parser.Url("/databases/:database_id", pathParams))
+    if err != nil {
+        return nil, err
+    }
+
+    u.RawQuery = client.internal.Parser.QueryWithStruct(queryParams, queryStructNames).Encode()
+
+    raw, err := json.Marshal(payload)
+    if err != nil {
+        return nil, err
+    }
+
+    var reqBody = bytes.NewReader(raw)
+
+    req, err := http.NewRequest("PATCH", u.String(), reqBody)
+    if err != nil {
+        return nil, err
+    }
+
+    req.Header.Set("Content-Type", "application/json")
 
     resp, err := client.internal.HttpClient.Do(req)
     if err != nil {

@@ -3,7 +3,19 @@
 // @see https://sdkgen.app
 
 
+
+// Link preview block (read-only).
 type BlockLinkPreview struct {
+    CreatedBy *User `json:"created_by"`
+    CreatedTime string `json:"created_time"`
+    HasChildren bool `json:"has_children"`
+    Id string `json:"id"`
+    InTrash bool `json:"in_trash"`
+    LastEditedBy *User `json:"last_edited_by"`
+    LastEditedTime string `json:"last_edited_time"`
+    Object string `json:"object"`
+    Parent *ParentId `json:"parent"`
+    Type string `json:"type"`
     LinkPreview *LinkPreview `json:"link_preview"`
 }
 

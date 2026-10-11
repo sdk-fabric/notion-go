@@ -3,6 +3,8 @@
 // @see https://sdkgen.app
 
 
+
+// Content of a link preview.
 type LinkPreview struct {
     Url string `json:"url"`
 }

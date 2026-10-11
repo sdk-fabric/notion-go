@@ -3,8 +3,14 @@
 // @see https://sdkgen.app
 
 
+
+// Error response returned by the Notion API for any non-2xx status.
 type Error struct {
+    AdditionalData map[string]any `json:"additional_data"`
     Code string `json:"code"`
     Message string `json:"message"`
+    Object string `json:"object"`
+    RequestId string `json:"request_id"`
+    Status int `json:"status"`
 }
 

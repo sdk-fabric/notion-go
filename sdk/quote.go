@@ -3,9 +3,11 @@
 // @see https://sdkgen.app
 
 
+
+// Content of a quote block.
 type Quote struct {
-    RichText []RichText `json:"rich_text"`
-    Color string `json:"color"`
     Children []Block `json:"children"`
+    Color string `json:"color"`
+    RichText []RichText `json:"rich_text"`
 }
 

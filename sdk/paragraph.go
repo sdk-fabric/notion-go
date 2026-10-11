@@ -3,9 +3,12 @@
 // @see https://sdkgen.app
 
 
+
+// Content of a paragraph block.
 type Paragraph struct {
-    RichText []RichText `json:"rich_text"`
-    Color string `json:"color"`
     Children []Block `json:"children"`
+    Color string `json:"color"`
+    Icon *Icon `json:"icon"`
+    RichText []RichText `json:"rich_text"`
 }
 

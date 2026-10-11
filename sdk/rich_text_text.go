@@ -3,11 +3,13 @@
 // @see https://sdkgen.app
 
 
+
+// Rich text object of type text.
 type RichTextText struct {
-    Type string `json:"type"`
     Annotations *RichTextAnnotation `json:"annotations"`
-    PlainText string `json:"plain_text"`
     Href string `json:"href"`
+    PlainText string `json:"plain_text"`
+    Type string `json:"type"`
     Text *Text `json:"text"`
 }
 

@@ -3,6 +3,8 @@
 // @see https://sdkgen.app
 
 
+
+// Parent is the workspace.
 type WorkspaceParentId struct {
     Type string `json:"type"`
     Workspace bool `json:"workspace"`

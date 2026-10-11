@@ -3,12 +3,14 @@
 // @see https://sdkgen.app
 
 
+
+// Styling annotations of rich text.
 type RichTextAnnotation struct {
     Bold bool `json:"bold"`
+    Code bool `json:"code"`
+    Color string `json:"color"`
     Italic bool `json:"italic"`
     Strikethrough bool `json:"strikethrough"`
     Underline bool `json:"underline"`
-    Code bool `json:"code"`
-    Color string `json:"color"`
 }
 

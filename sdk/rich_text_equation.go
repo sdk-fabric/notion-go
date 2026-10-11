@@ -3,11 +3,13 @@
 // @see https://sdkgen.app
 
 
+
+// Rich text object of type equation.
 type RichTextEquation struct {
-    Type string `json:"type"`
     Annotations *RichTextAnnotation `json:"annotations"`
-    PlainText string `json:"plain_text"`
     Href string `json:"href"`
+    PlainText string `json:"plain_text"`
+    Type string `json:"type"`
     Equation *Equation `json:"equation"`
 }
 

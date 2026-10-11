@@ -3,6 +3,8 @@
 // @see https://sdkgen.app
 
 
+
+// An inline link.
 type Link struct {
     Url string `json:"url"`
 }

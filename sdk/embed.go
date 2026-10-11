@@ -3,7 +3,10 @@
 // @see https://sdkgen.app
 
 
+
+// Content of an embed block.
 type Embed struct {
+    Caption []RichText `json:"caption"`
     Url string `json:"url"`
 }
 

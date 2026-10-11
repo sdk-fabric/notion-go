@@ -3,6 +3,8 @@
 // @see https://sdkgen.app
 
 
+
+// Content of a bookmark block.
 type Bookmark struct {
     Caption []RichText `json:"caption"`
     Url string `json:"url"`

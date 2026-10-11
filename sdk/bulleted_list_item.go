@@ -3,9 +3,11 @@
 // @see https://sdkgen.app
 
 
+
+// Content of a bulleted list item block.
 type BulletedListItem struct {
-    RichText []BulletedListItem `json:"rich_text"`
-    Color string `json:"color"`
     Children []Block `json:"children"`
+    Color string `json:"color"`
+    RichText []RichText `json:"rich_text"`
 }
 

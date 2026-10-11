@@ -3,7 +3,10 @@
 // @see https://sdkgen.app
 
 
+
+// Details about a person user.
 type Person struct {
     Email string `json:"email"`
+    EmailVerified bool `json:"email_verified"`
 }
 

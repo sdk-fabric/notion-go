@@ -3,6 +3,8 @@
 // @see https://sdkgen.app
 
 
+
+// An externally hosted file.
 type ExternalObject struct {
     Url string `json:"url"`
 }

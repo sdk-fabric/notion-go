@@ -22,16 +22,80 @@ type PageTag struct {
 
 
 
-// Get Retrieves a Page object using the ID specified.
-func (client *PageTag) Get(pageId string) (*Page, error) {
+// Create Creates a new page as a child of an existing page or data source.
+func (client *PageTag) Create(payload CreatePageRequest, filterProperties string) (*Page, error) {
+    pathParams := make(map[string]interface{})
+
+    queryParams := make(map[string]interface{})
+    queryParams["filter_properties"] = filterProperties
+
+    var queryStructNames []string
+
+    u, err := url.Parse(client.internal.Parser.Url("/pages", pathParams))
+    if err != nil {
+        return nil, err
+    }
+
+    u.RawQuery = client.internal.Parser.QueryWithStruct(queryParams, queryStructNames).Encode()
+
+    raw, err := json.Marshal(payload)
+    if err != nil {
+        return nil, err
+    }
+
+    var reqBody = bytes.NewReader(raw)
+
+    req, err := http.NewRequest("POST", u.String(), reqBody)
+    if err != nil {
+        return nil, err
+    }
+
+    req.Header.Set("Content-Type", "application/json")
+
+    resp, err := client.internal.HttpClient.Do(req)
+    if err != nil {
+        return nil, err
+    }
+
+    defer resp.Body.Close()
+
+    respBody, err := io.ReadAll(resp.Body)
+    if err != nil {
+        return nil, err
+    }
+
+    if resp.StatusCode >= 200 && resp.StatusCode < 300 {
+        var data Page
+        err := json.Unmarshal(respBody, &data)
+
+        return &data, err
+    }
+
+    var statusCode = resp.StatusCode
+    if statusCode >= 0 && statusCode <= 999 {
+        var data Error
+        err := json.Unmarshal(respBody, &data)
+
+        return nil, &ErrorException{
+            Payload: data,
+            Previous: err,
+        }
+    }
+
+    return nil, errors.New(fmt.Sprint("The server returned an unknown status code: ", statusCode))
+}
+
+// Get Retrieves a Page object using the ID specified. To read page content, use Retrieve block children.
+func (client *PageTag) Get(pageId string, filterProperties string) (*Page, error) {
     pathParams := make(map[string]interface{})
     pathParams["page_id"] = pageId
 
     queryParams := make(map[string]interface{})
+    queryParams["filter_properties"] = filterProperties
 
     var queryStructNames []string
 
-    u, err := url.Parse(client.internal.Parser.Url("/v1/pages/:page_id", pathParams))
+    u, err := url.Parse(client.internal.Parser.Url("/pages/:page_id", pathParams))
     if err != nil {
         return nil, err
     }
@@ -78,15 +142,132 @@ func (client *PageTag) Get(pageId string) (*Page, error) {
     return nil, errors.New(fmt.Sprint("The server returned an unknown status code: ", statusCode))
 }
 
-// Create Creates a new page that is a child of an existing page or database.
-func (client *PageTag) Create(payload Page) (*Page, error) {
+// GetMarkdown Retrieves the content of a page rendered as enhanced markdown.
+func (client *PageTag) GetMarkdown(pageId string, includeTranscript bool) (*PageMarkdown, error) {
     pathParams := make(map[string]interface{})
+    pathParams["page_id"] = pageId
+
+    queryParams := make(map[string]interface{})
+    queryParams["include_transcript"] = includeTranscript
+
+    var queryStructNames []string
+
+    u, err := url.Parse(client.internal.Parser.Url("/pages/:page_id/markdown", pathParams))
+    if err != nil {
+        return nil, err
+    }
+
+    u.RawQuery = client.internal.Parser.QueryWithStruct(queryParams, queryStructNames).Encode()
+
+
+    req, err := http.NewRequest("GET", u.String(), nil)
+    if err != nil {
+        return nil, err
+    }
+
+
+    resp, err := client.internal.HttpClient.Do(req)
+    if err != nil {
+        return nil, err
+    }
+
+    defer resp.Body.Close()
+
+    respBody, err := io.ReadAll(resp.Body)
+    if err != nil {
+        return nil, err
+    }
+
+    if resp.StatusCode >= 200 && resp.StatusCode < 300 {
+        var data PageMarkdown
+        err := json.Unmarshal(respBody, &data)
+
+        return &data, err
+    }
+
+    var statusCode = resp.StatusCode
+    if statusCode >= 0 && statusCode <= 999 {
+        var data Error
+        err := json.Unmarshal(respBody, &data)
+
+        return nil, &ErrorException{
+            Payload: data,
+            Previous: err,
+        }
+    }
+
+    return nil, errors.New(fmt.Sprint("The server returned an unknown status code: ", statusCode))
+}
+
+// GetProperty Retrieves a page property item. Paginated for title, rich_text, relation, people and rollup properties.
+func (client *PageTag) GetProperty(pageId string, propertyId string, pageSize int, startCursor string) (*PropertyItem, error) {
+    pathParams := make(map[string]interface{})
+    pathParams["page_id"] = pageId
+    pathParams["property_id"] = propertyId
+
+    queryParams := make(map[string]interface{})
+    queryParams["page_size"] = pageSize
+    queryParams["start_cursor"] = startCursor
+
+    var queryStructNames []string
+
+    u, err := url.Parse(client.internal.Parser.Url("/pages/:page_id/properties/:property_id", pathParams))
+    if err != nil {
+        return nil, err
+    }
+
+    u.RawQuery = client.internal.Parser.QueryWithStruct(queryParams, queryStructNames).Encode()
+
+
+    req, err := http.NewRequest("GET", u.String(), nil)
+    if err != nil {
+        return nil, err
+    }
+
+
+    resp, err := client.internal.HttpClient.Do(req)
+    if err != nil {
+        return nil, err
+    }
+
+    defer resp.Body.Close()
+
+    respBody, err := io.ReadAll(resp.Body)
+    if err != nil {
+        return nil, err
+    }
+
+    if resp.StatusCode >= 200 && resp.StatusCode < 300 {
+        var data PropertyItem
+        err := json.Unmarshal(respBody, &data)
+
+        return &data, err
+    }
+
+    var statusCode = resp.StatusCode
+    if statusCode >= 0 && statusCode <= 999 {
+        var data Error
+        err := json.Unmarshal(respBody, &data)
+
+        return nil, &ErrorException{
+            Payload: data,
+            Previous: err,
+        }
+    }
+
+    return nil, errors.New(fmt.Sprint("The server returned an unknown status code: ", statusCode))
+}
+
+// Move Moves an existing page to a new parent page or data source.
+func (client *PageTag) Move(pageId string, payload MovePageRequest) (*Page, error) {
+    pathParams := make(map[string]interface{})
+    pathParams["page_id"] = pageId
 
     queryParams := make(map[string]interface{})
 
     var queryStructNames []string
 
-    u, err := url.Parse(client.internal.Parser.Url("/v1/pages", pathParams))
+    u, err := url.Parse(client.internal.Parser.Url("/pages/:page_id/move", pathParams))
     if err != nil {
         return nil, err
     }
@@ -121,6 +302,133 @@ func (client *PageTag) Create(payload Page) (*Page, error) {
 
     if resp.StatusCode >= 200 && resp.StatusCode < 300 {
         var data Page
+        err := json.Unmarshal(respBody, &data)
+
+        return &data, err
+    }
+
+    var statusCode = resp.StatusCode
+    if statusCode >= 0 && statusCode <= 999 {
+        var data Error
+        err := json.Unmarshal(respBody, &data)
+
+        return nil, &ErrorException{
+            Payload: data,
+            Previous: err,
+        }
+    }
+
+    return nil, errors.New(fmt.Sprint("The server returned an unknown status code: ", statusCode))
+}
+
+// Update Updates page properties, icon, cover, lock state or trash status (in_trash).
+func (client *PageTag) Update(pageId string, payload UpdatePageRequest, filterProperties string) (*Page, error) {
+    pathParams := make(map[string]interface{})
+    pathParams["page_id"] = pageId
+
+    queryParams := make(map[string]interface{})
+    queryParams["filter_properties"] = filterProperties
+
+    var queryStructNames []string
+
+    u, err := url.Parse(client.internal.Parser.Url("/pages/:page_id", pathParams))
+    if err != nil {
+        return nil, err
+    }
+
+    u.RawQuery = client.internal.Parser.QueryWithStruct(queryParams, queryStructNames).Encode()
+
+    raw, err := json.Marshal(payload)
+    if err != nil {
+        return nil, err
+    }
+
+    var reqBody = bytes.NewReader(raw)
+
+    req, err := http.NewRequest("PATCH", u.String(), reqBody)
+    if err != nil {
+        return nil, err
+    }
+
+    req.Header.Set("Content-Type", "application/json")
+
+    resp, err := client.internal.HttpClient.Do(req)
+    if err != nil {
+        return nil, err
+    }
+
+    defer resp.Body.Close()
+
+    respBody, err := io.ReadAll(resp.Body)
+    if err != nil {
+        return nil, err
+    }
+
+    if resp.StatusCode >= 200 && resp.StatusCode < 300 {
+        var data Page
+        err := json.Unmarshal(respBody, &data)
+
+        return &data, err
+    }
+
+    var statusCode = resp.StatusCode
+    if statusCode >= 0 && statusCode <= 999 {
+        var data Error
+        err := json.Unmarshal(respBody, &data)
+
+        return nil, &ErrorException{
+            Payload: data,
+            Previous: err,
+        }
+    }
+
+    return nil, errors.New(fmt.Sprint("The server returned an unknown status code: ", statusCode))
+}
+
+// UpdateMarkdown Updates or replaces content in a page using enhanced markdown.
+func (client *PageTag) UpdateMarkdown(pageId string, payload UpdatePageMarkdownRequest) (*PageMarkdown, error) {
+    pathParams := make(map[string]interface{})
+    pathParams["page_id"] = pageId
+
+    queryParams := make(map[string]interface{})
+
+    var queryStructNames []string
+
+    u, err := url.Parse(client.internal.Parser.Url("/pages/:page_id/markdown", pathParams))
+    if err != nil {
+        return nil, err
+    }
+
+    u.RawQuery = client.internal.Parser.QueryWithStruct(queryParams, queryStructNames).Encode()
+
+    raw, err := json.Marshal(payload)
+    if err != nil {
+        return nil, err
+    }
+
+    var reqBody = bytes.NewReader(raw)
+
+    req, err := http.NewRequest("PATCH", u.String(), reqBody)
+    if err != nil {
+        return nil, err
+    }
+
+    req.Header.Set("Content-Type", "application/json")
+
+    resp, err := client.internal.HttpClient.Do(req)
+    if err != nil {
+        return nil, err
+    }
+
+    defer resp.Body.Close()
+
+    respBody, err := io.ReadAll(resp.Body)
+    if err != nil {
+        return nil, err
+    }
+
+    if resp.StatusCode >= 200 && resp.StatusCode < 300 {
+        var data PageMarkdown
         err := json.Unmarshal(respBody, &data)
 
         return &data, err

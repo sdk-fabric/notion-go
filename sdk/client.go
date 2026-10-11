@@ -20,8 +20,12 @@ type Client struct {
     internal *sdkgen.ClientAbstract
 }
 
-func (client *Client) User() *UserTag {
-    return NewUserTag(client.internal.HttpClient, client.internal.Parser)
+func (client *Client) Block() *BlockTag {
+    return NewBlockTag(client.internal.HttpClient, client.internal.Parser)
+}
+
+func (client *Client) DataSource() *DataSourceTag {
+    return NewDataSourceTag(client.internal.HttpClient, client.internal.Parser)
 }
 
 func (client *Client) Database() *DatabaseTag {
@@ -30,6 +34,10 @@ func (client *Client) Database() *DatabaseTag {
 
 func (client *Client) Page() *PageTag {
     return NewPageTag(client.internal.HttpClient, client.internal.Parser)
+}
+
+func (client *Client) User() *UserTag {
+    return NewUserTag(client.internal.HttpClient, client.internal.Parser)
 }
 
 
@@ -49,11 +57,11 @@ func NewClient(baseUrl string, credentials sdkgen.CredentialsInterface) (*Client
 func Build(token string) (*Client, error) {
     var credentials = sdkgen.HttpBearer{Token: token}
 
-    return NewClient("https://api.notion.com", credentials)
+    return NewClient("https://api.notion.com/v1", credentials)
 }
 
 func BuildAnonymous() (*Client, error) {
     var credentials = sdkgen.Anonymous{}
 
-    return NewClient("https://api.notion.com", credentials)
+    return NewClient("https://api.notion.com/v1", credentials)
 }

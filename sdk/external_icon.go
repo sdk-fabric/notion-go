@@ -3,6 +3,8 @@
 // @see https://sdkgen.app
 
 
+
+// Icon hosted at an external URL.
 type ExternalIcon struct {
     Type string `json:"type"`
     External *ExternalObject `json:"external"`

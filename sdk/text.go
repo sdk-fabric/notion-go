@@ -3,6 +3,8 @@
 // @see https://sdkgen.app
 
 
+
+// Text content of a rich text object of type text.
 type Text struct {
     Content string `json:"content"`
     Link *Link `json:"link"`

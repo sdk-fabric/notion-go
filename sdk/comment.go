@@ -3,9 +3,20 @@
 // @see https://sdkgen.app
 
 
+
+// A comment on a Notion page or block.
 type Comment struct {
-    Parent *ParentId `json:"parent"`
+    Attachments []CommentAttachment `json:"attachments"`
+    CreatedBy *User `json:"created_by"`
+    CreatedTime string `json:"created_time"`
     DiscussionId string `json:"discussion_id"`
-    RichText *RichText `json:"rich_text"`
+    DisplayName *CommentDisplayName `json:"display_name"`
+    HasPendingAttachments bool `json:"has_pending_attachments"`
+    Id string `json:"id"`
+    LastEditedTime string `json:"last_edited_time"`
+    Object string `json:"object"`
+    OriginalContentDeleted bool `json:"original_content_deleted"`
+    Parent *ParentId `json:"parent"`
+    RichText []RichText `json:"rich_text"`
 }
 

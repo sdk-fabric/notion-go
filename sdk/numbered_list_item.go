@@ -4,8 +4,10 @@
 
 
 type NumberedListItem struct {
-    RichText []RichText `json:"rich_text"`
-    Color string `json:"color"`
     Children []Block `json:"children"`
+    Color string `json:"color"`
+    ListFormat string `json:"list_format"`
+    ListStartIndex int `json:"list_start_index"`
+    RichText []RichText `json:"rich_text"`
 }
 

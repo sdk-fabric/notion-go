@@ -3,10 +3,12 @@
 // @see https://sdkgen.app
 
 
+
+// Rich text object containing styled text, mentions or inline equations.
 type RichText struct {
-    Type string `json:"type"`
     Annotations *RichTextAnnotation `json:"annotations"`
-    PlainText string `json:"plain_text"`
     Href string `json:"href"`
+    PlainText string `json:"plain_text"`
+    Type string `json:"type"`
 }
 

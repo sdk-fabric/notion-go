@@ -3,6 +3,8 @@
 // @see https://sdkgen.app
 
 
+
+// Page, database or block icon.
 type Icon struct {
     Type string `json:"type"`
 }

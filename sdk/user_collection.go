@@ -3,9 +3,13 @@
 // @see https://sdkgen.app
 
 
+
+// Paginated list of users.
 type UserCollection struct {
-    Results []User `json:"results"`
-    NextCursor string `json:"next_cursor"`
     HasMore bool `json:"has_more"`
+    NextCursor string `json:"next_cursor"`
+    Object string `json:"object"`
+    Results []User `json:"results"`
+    Type string `json:"type"`
 }
 

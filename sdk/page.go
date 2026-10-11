@@ -3,19 +3,23 @@
 // @see https://sdkgen.app
 
 
+
+// The Page object contains the page property values of a single Notion page.
 type Page struct {
-    Object string `json:"object"`
     Id string `json:"id"`
-    CreatedTime string `json:"created_time"`
-    LastEditedTime string `json:"last_edited_time"`
+    Object string `json:"object"`
+    Cover *Cover `json:"cover"`
     CreatedBy *User `json:"created_by"`
-    LastEditedBy *User `json:"last_edited_by"`
-    Cover *FileObject `json:"cover"`
+    CreatedTime string `json:"created_time"`
     Icon *Icon `json:"icon"`
     InTrash bool `json:"in_trash"`
-    Properties map[string]any `json:"properties"`
+    IsArchived bool `json:"is_archived"`
+    IsLocked bool `json:"is_locked"`
+    LastEditedBy *User `json:"last_edited_by"`
+    LastEditedTime string `json:"last_edited_time"`
     Parent *ParentId `json:"parent"`
-    Url string `json:"url"`
+    Properties map[string]PagePropertyValue `json:"properties"`
     PublicUrl string `json:"public_url"`
+    Url string `json:"url"`
 }
 

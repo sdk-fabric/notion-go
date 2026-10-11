@@ -3,6 +3,8 @@
 // @see https://sdkgen.app
 
 
+
+// Content of a child database block.
 type ChildDatabase struct {
     Title string `json:"title"`
 }

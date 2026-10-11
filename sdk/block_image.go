@@ -3,18 +3,19 @@
 // @see https://sdkgen.app
 
 
+
+// Image block.
 type BlockImage struct {
-    Object string `json:"object"`
+    CreatedBy *User `json:"created_by"`
+    CreatedTime string `json:"created_time"`
+    HasChildren bool `json:"has_children"`
     Id string `json:"id"`
+    InTrash bool `json:"in_trash"`
+    LastEditedBy *User `json:"last_edited_by"`
+    LastEditedTime string `json:"last_edited_time"`
+    Object string `json:"object"`
     Parent *ParentId `json:"parent"`
     Type string `json:"type"`
-    CreatedTime string `json:"created_time"`
-    CreatedBy *User `json:"created_by"`
-    LastEditedTime string `json:"last_edited_time"`
-    LastEditedBy *User `json:"last_edited_by"`
-    Archived bool `json:"archived"`
-    InTrash bool `json:"in_trash"`
-    HasChildren bool `json:"has_children"`
-    Image *FileObject `json:"image"`
+    Image *File `json:"image"`
 }
 

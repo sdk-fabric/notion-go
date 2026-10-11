@@ -3,6 +3,8 @@
 // @see https://sdkgen.app
 
 
+
+// Content of a child page block.
 type ChildPage struct {
     Title string `json:"title"`
 }

@@ -3,6 +3,8 @@
 // @see https://sdkgen.app
 
 
+
+// Parent is a page.
 type PageParentId struct {
     Type string `json:"type"`
     PageId string `json:"page_id"`

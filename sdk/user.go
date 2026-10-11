@@ -3,12 +3,15 @@
 // @see https://sdkgen.app
 
 
+
+// A user in a Notion workspace: a member, guest or bot (integration).
 type User struct {
-    Object string `json:"object"`
-    Id string `json:"id"`
-    Type string `json:"type"`
-    Person *Person `json:"person"`
-    Name string `json:"name"`
     AvatarUrl string `json:"avatar_url"`
+    Bot *UserBot `json:"bot"`
+    Id string `json:"id"`
+    Name string `json:"name"`
+    Object string `json:"object"`
+    Person *Person `json:"person"`
+    Type string `json:"type"`
 }
 

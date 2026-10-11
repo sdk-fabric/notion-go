@@ -3,6 +3,8 @@
 // @see https://sdkgen.app
 
 
+
+// A LaTeX equation expression.
 type Equation struct {
     Expression string `json:"expression"`
 }

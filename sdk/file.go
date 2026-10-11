@@ -3,9 +3,14 @@
 // @see https://sdkgen.app
 
 
+
+// File object used by image, video, pdf, file and audio blocks, and by files property values.
 type File struct {
     Caption []RichText `json:"caption"`
+    External *ExternalObject `json:"external"`
     File *FileObject `json:"file"`
+    FileUpload *IdReference `json:"file_upload"`
     Name string `json:"name"`
+    Type string `json:"type"`
 }
 

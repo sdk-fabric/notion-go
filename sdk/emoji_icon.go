@@ -3,6 +3,8 @@
 // @see https://sdkgen.app
 
 
+
+// Emoji icon.
 type EmojiIcon struct {
     Type string `json:"type"`
     Emoji string `json:"emoji"`

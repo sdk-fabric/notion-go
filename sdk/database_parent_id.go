@@ -3,6 +3,8 @@
 // @see https://sdkgen.app
 
 
+
+// Parent is a database.
 type DatabaseParentId struct {
     Type string `json:"type"`
     DatabaseId string `json:"database_id"`

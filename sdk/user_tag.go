@@ -22,17 +22,73 @@ type UserTag struct {
 
 
 
-// GetAll Returns a paginated list of Users for the workspace. The response may contain fewer than page_size of results.
-func (client *UserTag) GetAll(startCursor string, pageSize int) (*UserCollection, error) {
+// Get Retrieves a User using the ID specified.
+func (client *UserTag) Get(userId string) (*User, error) {
     pathParams := make(map[string]interface{})
+    pathParams["user_id"] = userId
 
     queryParams := make(map[string]interface{})
-    queryParams["start_cursor"] = startCursor
-    queryParams["page_size"] = pageSize
 
     var queryStructNames []string
 
-    u, err := url.Parse(client.internal.Parser.Url("/v1/users", pathParams))
+    u, err := url.Parse(client.internal.Parser.Url("/users/:user_id", pathParams))
+    if err != nil {
+        return nil, err
+    }
+
+    u.RawQuery = client.internal.Parser.QueryWithStruct(queryParams, queryStructNames).Encode()
+
+
+    req, err := http.NewRequest("GET", u.String(), nil)
+    if err != nil {
+        return nil, err
+    }
+
+
+    resp, err := client.internal.HttpClient.Do(req)
+    if err != nil {
+        return nil, err
+    }
+
+    defer resp.Body.Close()
+
+    respBody, err := io.ReadAll(resp.Body)
+    if err != nil {
+        return nil, err
+    }
+
+    if resp.StatusCode >= 200 && resp.StatusCode < 300 {
+        var data User
+        err := json.Unmarshal(respBody, &data)
+
+        return &data, err
+    }
+
+    var statusCode = resp.StatusCode
+    if statusCode >= 0 && statusCode <= 999 {
+        var data Error
+        err := json.Unmarshal(respBody, &data)
+
+        return nil, &ErrorException{
+            Payload: data,
+            Previous: err,
+        }
+    }
+
+    return nil, errors.New(fmt.Sprint("The server returned an unknown status code: ", statusCode))
+}
+
+// GetAll Returns a paginated list of Users for the workspace. The response may contain fewer than page_size of results.
+func (client *UserTag) GetAll(pageSize int, startCursor string) (*UserCollection, error) {
+    pathParams := make(map[string]interface{})
+
+    queryParams := make(map[string]interface{})
+    queryParams["page_size"] = pageSize
+    queryParams["start_cursor"] = startCursor
+
+    var queryStructNames []string
+
+    u, err := url.Parse(client.internal.Parser.Url("/users", pathParams))
     if err != nil {
         return nil, err
     }
@@ -79,16 +135,15 @@ func (client *UserTag) GetAll(startCursor string, pageSize int) (*UserCollection
     return nil, errors.New(fmt.Sprint("The server returned an unknown status code: ", statusCode))
 }
 
-// Get Retrieves a User using the ID specified.
-func (client *UserTag) Get(userId string) (*User, error) {
+// GetMe Retrieves the bot User associated with the API token provided in the authorization header.
+func (client *UserTag) GetMe() (*User, error) {
     pathParams := make(map[string]interface{})
-    pathParams["user_id"] = userId
 
     queryParams := make(map[string]interface{})
 
     var queryStructNames []string
 
-    u, err := url.Parse(client.internal.Parser.Url("/v1/users/:user_id", pathParams))
+    u, err := url.Parse(client.internal.Parser.Url("/users/me", pathParams))
     if err != nil {
         return nil, err
     }

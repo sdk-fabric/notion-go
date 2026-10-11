@@ -3,9 +3,11 @@
 // @see https://sdkgen.app
 
 
+
+// Content of a callout block.
 type Callout struct {
-    RichText []RichText `json:"rich_text"`
-    Icon *Icon `json:"icon"`
     Color string `json:"color"`
+    Icon *Icon `json:"icon"`
+    RichText []RichText `json:"rich_text"`
 }
 

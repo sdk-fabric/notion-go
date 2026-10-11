@@ -3,6 +3,8 @@
 // @see https://sdkgen.app
 
 
+
+// Icon hosted by Notion.
 type FileIcon struct {
     Type string `json:"type"`
     File *FileObject `json:"file"`

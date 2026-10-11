@@ -3,8 +3,10 @@
 // @see https://sdkgen.app
 
 
+
+// A Notion-hosted file with a temporary URL.
 type FileObject struct {
-    Url string `json:"url"`
     ExpiryTime string `json:"expiry_time"`
+    Url string `json:"url"`
 }
 

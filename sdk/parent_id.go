@@ -3,6 +3,8 @@
 // @see https://sdkgen.app
 
 
+
+// Information about the parent of a page, block, database, data source or comment.
 type ParentId struct {
     Type string `json:"type"`
 }

@@ -3,15 +3,24 @@
 // @see https://sdkgen.app
 
 
+
+// A database: a container for one or more data sources.
 type Database struct {
-    Object string `json:"object"`
-    Id string `json:"id"`
+    Cover *Cover `json:"cover"`
     CreatedTime string `json:"created_time"`
+    DataSources []DataSourceReference `json:"data_sources"`
+    DatabaseType string `json:"database_type"`
+    Description []RichText `json:"description"`
+    Icon *Icon `json:"icon"`
+    Id string `json:"id"`
+    InTrash bool `json:"in_trash"`
+    IsInline bool `json:"is_inline"`
+    IsLocked bool `json:"is_locked"`
     LastEditedTime string `json:"last_edited_time"`
-    Icon *DatabaseIcon `json:"icon"`
-    Cover *DatabaseCover `json:"cover"`
+    Object string `json:"object"`
+    Parent *ParentId `json:"parent"`
+    PublicUrl string `json:"public_url"`
+    Title []RichText `json:"title"`
     Url string `json:"url"`
-    Title []DatabaseTitle `json:"title"`
-    Description []DatabaseTitle `json:"description"`
 }
 

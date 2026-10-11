@@ -3,9 +3,11 @@
 // @see https://sdkgen.app
 
 
+
+// Content of a code block.
 type Code struct {
     Caption []RichText `json:"caption"`
-    RichText []RichText `json:"rich_text"`
     Language string `json:"language"`
+    RichText []RichText `json:"rich_text"`
 }
 
